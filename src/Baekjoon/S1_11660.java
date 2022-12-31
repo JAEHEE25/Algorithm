@@ -17,7 +17,7 @@ public class S1_11660 {
     int m = Integer.parseInt(st.nextToken());
 
     ArrayList<int[]> sumList = new ArrayList<>();
-    int[] sum = new int[n+1];
+    int[] sum;
 
     //행렬 입력
     int[][] matrix = new int[n][n];
@@ -54,6 +54,5 @@ public class S1_11660 {
       sb.append(result + "\n");
     }
     System.out.print(sb);
-
   }
 }
