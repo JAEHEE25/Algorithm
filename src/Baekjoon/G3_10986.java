@@ -28,16 +28,32 @@ public class G3_10986 {
     }
 
     //구간합 만들기
-    while (n > 0) {
-      int[] sum = new int[n + 1];
+//    while (n > 0) {
+//      int[] sum = new int[n + 1];
+//
+//      for (int i = 1; i <= n; i++) {
+//        sum[i] = sum[i - 1] + input.get(i - 1);
+//      }
+//
+//      cnt += (int) Arrays.stream(sum).filter(x -> x % m == 0).count() - 1;
+//      input.remove(0);
+//      n--;
+//    }
 
-      for (int i = 1; i <= n; i++) {
-        sum[i] = sum[i - 1] + input.get(i - 1);
-      }
+    int[] sum = new int[n + 1];
 
-      cnt += (int) Arrays.stream(sum).filter(x -> x % m == 0).count() - 1;
-      input.remove(0);
-      n--;
+    for (int i = 1; i <= n; i++) {
+      sum[i] = sum[i - 1] + input.get(i - 1);
+    }
+
+    System.out.println(Arrays.toString(sum));
+    int[] result = new int[n + 1];
+
+    for (int i = 1; i <= n; i ++) {
+      result[i-1] = sum[i] - sum[1];
+      System.out.println(result[i-1]);
+      System.out.println(Arrays.toString(result));
+//      sum = result;
     }
 
     sb.append(cnt);
