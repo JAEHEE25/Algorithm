@@ -14,13 +14,13 @@ public class S2_18352 {
 
   static boolean[] visited;
   static ArrayList<Integer>[] close;
-  static StringBuilder sb;
+  static int[] distance;
 
   public static void main(String[] args) throws IOException {
     System.setIn(new java.io.FileInputStream("src/Baekjoon/input.txt"));
     BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
     StringTokenizer st = new StringTokenizer(br.readLine());
-    sb = new StringBuilder();
+    StringBuilder sb = new StringBuilder();
 
     int n = Integer.parseInt(st.nextToken());
     int m = Integer.parseInt(st.nextToken());
@@ -40,51 +40,37 @@ public class S2_18352 {
       close[Integer.parseInt(st.nextToken())].add(Integer.parseInt(st.nextToken()));
     }
 
-    Queue<Integer> queue = new LinkedList<>();
-    ArrayList<Integer> answer = new ArrayList<>();
-    BFS(x, k, queue, answer);
+    distance = new int[n+1];
+    BFS(x);
 
-    Collections.sort(answer);
-
-    for (int a : answer) {
-      sb.append(a + "\n");
+    for (int i = 1; i <= n; i++) {
+      if (distance[i] == k) {
+        sb.append(i + "\n");
+      }
+    }
+    if (sb.length() == 0) {
+      sb.append("-1");
     }
     System.out.print(sb);
   }//main
 
-  static void BFS(int start, int dis, Queue<Integer> queue, ArrayList<Integer> answer) {
+  static void BFS(int start) {
+    Queue<Integer> queue = new LinkedList<>();
     queue.add(start);
     visited[start] = true;
-    int cnt = 0;
+    distance[start] = 0;
 
     while (!queue.isEmpty()) {
       int poll = queue.poll();
 
-      if (close[poll].isEmpty()) {
-        continue;
-      }
-
-      cnt++;
-
       for (int i : close[poll]) {
-        if (visited[i]) {
-          continue;
+        if (!visited[i]) {
+          queue.add(i);
+          visited[i] = true;
+          distance[i] = distance[poll] + 1;
         }
-        queue.add(i);
-        visited[i] = true;
-
-        if (cnt == dis) {
-          answer.add(i);
-        }
-      }
-
-      if (cnt == dis) {
-        return;
       }
     }
-
-    sb.append("-1");
-
 
   }//BFS
 
