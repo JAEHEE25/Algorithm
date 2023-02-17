@@ -15,7 +15,7 @@ public class Main {
       for (int i = 1; i <= n; i++) {
         if (i == 1 || i == 2 || i == 3) dp[i] = 1;
         else {
-          dp[i] = Math.max(dp[i-3] + dp[i-2], dp[i-1]);
+          dp[i] = dp[i-3] + dp[i-2];
         }
       }
 
