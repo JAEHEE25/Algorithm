@@ -38,11 +38,6 @@ public class Main {
             relation[q].add(p);
         }
 
-        for (ArrayList<Integer> list: relation) {
-            if (list == null) continue;
-            Collections.sort(list);
-        }
-
         cnt = -1;
         isAnswer = false;
         DFS(x, y);
