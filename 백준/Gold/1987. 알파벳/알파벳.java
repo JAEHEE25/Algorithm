@@ -31,6 +31,9 @@ public class Main {
     }//main
 
     static int recur(int x, int y, int cnt) {
+      
+        answer = Math.max(cnt, answer);
+        
         for (int i = 0; i < 4; i++) {
             int nx = x + dx[i];
             int ny = y + dy[i];
@@ -50,7 +53,6 @@ public class Main {
             visit[idx] = false;
         }
 
-        answer = Math.max(cnt, answer);
         return answer;
     }//cnt
 }//class
