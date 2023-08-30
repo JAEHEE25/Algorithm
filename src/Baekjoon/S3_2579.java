@@ -1,0 +1,39 @@
+package Baekjoon;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+
+public class S3_2579 {
+  public static void main(String[] args) throws IOException {
+    BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+    int n = Integer.parseInt(br.readLine());
+
+    int[] stairs = new int[n + 1];
+    int[] dp = new int[n + 1];
+    //dp[계단 번호] = 최대 점수
+
+    for (int i = 1; i <= n; i++) {
+      stairs[i] = Integer.parseInt(br.readLine());
+    }
+
+    for (int i = 1; i <= n; i++) {
+      if (i == 1) dp[1] = stairs[1];
+      else if (i == 2) dp[2] = stairs[1] + stairs[2];
+      else if (i == 3) dp[3] = Math.max(stairs[1], stairs[2]) + stairs[3];
+      else {
+        dp[i] = Math.max(dp[i - 3] + stairs[i - 1], dp[i - 2]) + stairs[i];
+      }
+    }
+    System.out.println(dp[n]);
+    /*
+    점화식
+    n번째 계단을 밟는 것
+    n-3 -> n-1 -> n을 밟거나
+    n-2 -> n을 밟거나
+
+    두가지 중 큰 값 + n번째 계단의 값이 점수가 됨
+     */
+
+  }//main
+}//class

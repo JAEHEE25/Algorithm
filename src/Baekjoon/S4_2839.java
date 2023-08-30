@@ -4,11 +4,9 @@ import java.io.IOException;
 import java.util.Scanner;
 
 public class S4_2839 {
-  static int n;
-
   public static void main(String[] args) throws IOException {
     Scanner sc = new Scanner(System.in);
-    n = sc.nextInt();
+    int n = sc.nextInt();
     int cnt = 0;
 
     while (true) {
