@@ -13,13 +13,12 @@ public class S2_11053 {
     int[] arr = new int[N];
     int[] dp = new int[N];
     //dp[인덱스] = 수열의 길이
+    int answer = 0;
 
     for (int i = 0; i < N; i++) {
       arr[i] = Integer.parseInt(st.nextToken());
       dp[i] = 1;
     }
-
-    int answer = 0;
 
     for (int i = 0; i < N; i++) {
       for (int j = 0; j < i; j++) {
@@ -33,5 +32,4 @@ public class S2_11053 {
     System.out.println(answer);
 
   }//main
-
 }//class

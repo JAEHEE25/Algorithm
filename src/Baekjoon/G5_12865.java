@@ -18,13 +18,11 @@ public class G5_12865 {
             int value = Integer.parseInt(st.nextToken());
 
             for (int curW = 1; curW <= K; curW++) { //무게 돌기, curW: 현재 무게
-                dp[item][curW] = dp[item - 1][curW];
+                dp[item][curW] = dp[item - 1][curW]; //이전 행의 가치 저장
                 if (curW - weight >= 0) { //남는 무게가 있을 경우
-                    dp[item][curW] = Math.max(dp[item][curW], value + dp[item][curW - weight]);
+                    dp[item][curW] = Math.max(dp[item][curW], value + dp[item - 1][curW - weight]);
                 }
             }
-
-
         }
         System.out.println(dp[N][K]);
 

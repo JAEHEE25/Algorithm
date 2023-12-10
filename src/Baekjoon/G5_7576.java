@@ -3,11 +3,11 @@ package Baekjoon;
 import java.io.*;
 import java.util.*;
 
-class Tomato {
+class Tomato7576 {
   int x;
   int y;
 
-  public Tomato(int x, int y) {
+  public Tomato7576(int x, int y) {
     this.x = x;
     this.y = y;
   }
@@ -15,7 +15,7 @@ class Tomato {
 
 public class G5_7576 {
 
-  static Queue<Tomato> queue;
+  static Queue<Tomato7576> queue;
   static int[][] tomato;
   static boolean[][] visited;
   static int m;
@@ -54,7 +54,7 @@ public class G5_7576 {
     for (int i = 0; i < n; i++) {
       for (int j = 0; j < m; j++) {
         if (tomato[i][j] == 1 && !visited[i][j]) {
-          queue.add(new Tomato(i, j));
+          queue.add(new Tomato7576(i, j));
           visited[i][j] = true;
         }
       }
@@ -87,7 +87,7 @@ public class G5_7576 {
     int[] dy = {0, 1, -1, 0};
 
     while (!queue.isEmpty()) {
-      Tomato poll = queue.poll();
+      Tomato7576 poll = queue.poll();
 
       for (int i = 0; i < 4; i++) {
         int nx = poll.x + dx[i];
@@ -103,7 +103,7 @@ public class G5_7576 {
 
         if (tomato[nx][ny] == 0) {
           tomato[nx][ny] = tomato[poll.x][poll.y] + 1;
-          queue.add(new Tomato(nx, ny));
+          queue.add(new Tomato7576(nx, ny));
           visited[nx][ny] = true;
         }
       }

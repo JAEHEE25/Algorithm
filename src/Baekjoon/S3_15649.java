@@ -7,7 +7,7 @@ public class S3_15649 {
   static boolean[] visit;
   static int[] numbers;
   static int N, M;
-  static StringBuffer sb;
+  static StringBuilder sb;
 
   public static void main(String[] args) {
     Scanner sc = new Scanner(System.in);
@@ -16,15 +16,16 @@ public class S3_15649 {
 
     visit = new boolean[N+1];
     numbers = new int[M];
-    sb = new StringBuffer();
+    sb = new StringBuilder();
 
     DFS(0);
 
+    System.out.println(sb);
   }//main
 
 
   static void DFS(int depth) {
-    System.out.println(" depth " + depth);
+//    System.out.println(" dep/h " + depth);
     if (depth == M) { //재귀 끝
       for (int i = 0; i < M; i++) {
         sb.append(numbers[i]).append(" ");
@@ -34,14 +35,14 @@ public class S3_15649 {
     }
 
     for (int i = 1; i <= N; i++) {
-      System.out.println(" i " + i);
+//      System.out.println(" i " + i);
       if (visit[i]) continue;
       visit[i] = true;
       numbers[depth] = i;
-      System.out.println(Arrays.toString(numbers));
-      System.out.println("depth " + depth);
+//      System.out.println(Arrays.toString(numbers));
+//      System.out.println("depth " + depth);
       DFS(depth + 1);
-      System.out.println("false 처리 " + i);
+//      System.out.println("false 처리 " + i);
       visit[i] = false;
     }
   }//DFS
