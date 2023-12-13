@@ -1,90 +1,76 @@
-//package Baekjoon;
-//
-//import java.io.BufferedReader;
-//import java.io.IOException;
-//import java.io.InputStreamReader;
-//import java.util.Arrays;
-//import java.util.LinkedList;
-//import java.util.Queue;
-//import java.util.StringTokenizer;
-//
-//class Node {
-//  public int x;
-//  public int y;
-//
-//  public Node(int x, int y) {
-//    this.x = x;
-//    this.y = y;
-//  }
-//}
-//
-//public class S1_2178 {
-//
-//  static int[][] maze;
-//  static boolean[][] visited;
-//  static int n;
-//  static int m;
-//  static int cnt;
-//
-//  public static void main(String[] args) throws IOException {
-//    BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-//    StringTokenizer st = new StringTokenizer(br.readLine());
-//
-//    n = Integer.parseInt(st.nextToken());
-//    m = Integer.parseInt(st.nextToken());
-//
-//    maze = new int[n][m];
-//    visited = new boolean[n][m];
-//
-//    for (int i = 0; i < n; i++) {
-//      char[] ch = br.readLine().toCharArray();
-//
-//      for (int j = 0; j < m; j++) {
-//        maze[i][j] = ch[j] - '0';
-//      }
-//    }
-//
-//    System.out.println(Arrays.deepToString(maze));
-//
-//    BFS(0, 0);
-//
-//    System.out.println(maze[n-1][m-1]);
-//
-//  }//main
-//
-//  static void BFS(int x, int y) {
-//    Queue<node> queue = new LinkedList<>();
-//    int[] dx = {1, 0, 0, -1};
-//    int[] dy = {0, 1, -1, 0};
-//
-//    queue.add(new node(x, y));
-//    visited[x][y] = true;
-//
-//    while (!queue.isEmpty()) {
-//      node poll = queue.poll();
-//      cnt++;
-//
-//      for (int i = 0; i < 4; i++) {
-//        int nx = poll.x + dx[i];
-//        int ny = poll.y + dy[i];
-//
-//        if (nx >= n || nx < 0 || ny >= m || ny < 0) {
-//          continue;
-//        }
-//
-//        if (!visited[nx][ny] && maze[nx][ny] == 1) {
-//          queue.add(new node(nx, ny));
-//          maze[nx][ny] = maze[poll.x][poll.y] + 1;
-//          System.out.println(Arrays.deepToString(maze));
-//
-//          visited[nx][ny] = true;
-//        }
-//      }
-//
-//
-//    }
-//
-//
-//  }//BFS
-//
-//}//class
+package Baekjoon;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.StringTokenizer;
+
+public class S1_2178 {
+    static int N;
+    static int M;
+    static char[][] maze;
+    static boolean[][] visited;
+    static int[] dx = {0, 0, -1, 1};
+    static int[] dy = {1, -1, 0, 0};
+    static int answer = 0;
+
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st = new StringTokenizer(br.readLine());
+        N = Integer.parseInt(st.nextToken());
+        M = Integer.parseInt(st.nextToken());
+        maze = new char[N][M];
+        visited = new boolean[N][M];
+
+        for (int i = 0; i < N; i++) {
+            maze[i] = br.readLine().toCharArray();
+        }
+
+        BFS();
+        System.out.println(answer);
+    }//main
+
+    static void BFS() {
+        Queue<Block> queue = new LinkedList<>();
+        queue.add(new Block(0, 0, 0));
+        visited[0][0] = true;
+
+        while (!queue.isEmpty()) {
+            Block poll = queue.poll();
+
+            if (poll.x == N - 1 && poll.y == M - 1) {
+                answer = poll.count + 1;
+                break;
+            }
+
+            for (int i = 0; i < 4; i++) {
+                int nx = poll.x + dx[i];
+                int ny = poll.y + dy[i];
+
+                if (nx < 0 || nx >= N || ny < 0 || ny >= M) {
+                    continue;
+                }
+
+                if (!visited[nx][ny] && maze[nx][ny] == '1') {
+                    queue.add(new Block(nx, ny, poll.count + 1));
+                    visited[nx][ny] = true;
+                }
+            }
+        }
+    }
+}//class
+
+class Block {
+    int x;
+    int y;
+    int count;
+
+    Block(int x, int y, int count) {
+        this.x = x;
+        this.y = y;
+        this.count = count;
+    }
+}
