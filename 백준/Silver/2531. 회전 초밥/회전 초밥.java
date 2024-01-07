@@ -1,35 +1,65 @@
-import java.io.*;
-import java.util.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.StringTokenizer;
 
 public class Main {
-    static int N, d, k, c;
-    static int[] sushi;
-    public static void main(String[] args) throws Exception{
+
+    public static void main(String[] args) throws IOException {
+//        String pack = Baekjoon.Silver.S1_2531.Main.class.getPackage().toString().split(" ")[1];
+//        String realPack = String.join("/", pack.split("[.]")[1], pack.split("[.]")[2]);
+//        BufferedReader br = new BufferedReader(new FileReader(realPack + "/input.txt"));
+
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
-        N = Integer.parseInt(st.nextToken());
-        d = Integer.parseInt(st.nextToken());
-        k = Integer.parseInt(st.nextToken());
-        c = Integer.parseInt(st.nextToken())-1;
-        sushi = new int[N];
-        int[] eat = new int[d];	// 해당 종류의 초밥을 몇개 먹었는지 저장하는 배열
-        for(int i =0 ; i < N ; i++){
-            sushi[i] = Integer.parseInt(br.readLine())-1;
+        int N = Integer.parseInt(st.nextToken());
+        int d = Integer.parseInt(st.nextToken());
+        int k = Integer.parseInt(st.nextToken());
+        int c = Integer.parseInt(st.nextToken());
+
+        int[] sushi = new int[N + 1];
+        int[] eaten = new int[d + 1];
+        for (int i = 1; i <= N; i++) {
+            sushi[i] = Integer.parseInt(br.readLine());
         }
-        int res = 0;
-        int cnt = 0;
-        for(int i =0 ; i < k ; i++){
-            if(eat[sushi[i]]++ == 0) cnt++;
-        }
-        for(int i =0 ; i < N ; i++){
-            if(res <= cnt){     // MAX 값 새로 갱신
-                if(eat[c] == 0) res = cnt+1;
-                else res = cnt;
+
+        int kind = 0;
+        for (int i = 1; i <= k; i++) {
+            if (eaten[sushi[i]]++ == 0) {
+                kind++;
             }
-            int j = (i+k)%N;  // end 값 (순환 → 인덱스 초과할 때의 처리)
-            if(eat[sushi[j]] ++ == 0) cnt++;
-            if(-- eat[sushi[i]] == 0) cnt--;
         }
-        System.out.println(res);
-    }
-}
+
+        int pastSushi = 1;
+        int newSushi = k + 1;
+        int max = kind;
+
+        while (pastSushi <= N) {
+//            System.out.println("start " + sushi[pastSushi] + " end " + sushi[newSushi]);
+
+            if (eaten[sushi[pastSushi]]-- <= 1) { //방금 전이 중복 초밥이 아닐 경우
+                kind--;
+            }
+
+            if (eaten[sushi[newSushi]]++ == 0) { //새로운 초밥일 경우에만
+                kind++;
+            }
+
+            if (eaten[c]++ == 0) {
+                kind++;
+            }
+
+//            System.out.println("kind " + kind + " max " + max);
+            max = Math.max(kind, max);
+            
+            pastSushi++;
+            newSushi++;
+            
+            if (newSushi > N) {
+                newSushi %= N;
+            }
+        }
+        System.out.println(max);
+    }//main
+
+}//class
