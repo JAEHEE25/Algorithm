@@ -1,41 +1,48 @@
+import java.io.*;
 import java.util.*;
 
 public class Main {
+    static int N;
+    static int M;
+    static int[] arr;
+    static int[] result;
+    static boolean[] visited;
+    static StringBuilder sb = new StringBuilder();
 
-  static StringBuilder sb = new StringBuilder();
-  static int N, M;
-  static int[] arr;
-  static boolean[] visited;
 
-  public static void main(String[] args) {
-    Scanner sc = new Scanner(System.in);
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st = new StringTokenizer(br.readLine());
+        N = Integer.parseInt(st.nextToken());
+        M = Integer.parseInt(st.nextToken());
+        arr = new int[N + 1];
+        result = new int[M];
+        visited = new boolean[N + 1];
 
-    N = sc.nextInt();
-    M = sc.nextInt();
+        for (int i = 1; i <= N; i++) {
+            arr[i] = i;
+        }
 
-    visited = new boolean[N + 1];
-    arr = new int[M + 1];
+        backtracking(0);
+        System.out.println(sb);
+    }//main
 
-    DFS(0);
-    System.out.print(sb);
-  }
+    static void backtracking(int depth) {
+        if (depth == M) {
+            for (int num : result) {
+                sb.append(num + " ");
+            }
+            sb.append("\n");
+            return;
+        }
 
-  private static void DFS(int depth) {
-    if (depth == M) {
-      for (int i = 0; i < M; i++) {
-        sb.append(arr[i]).append(" ");
-      }
-      sb.append("\n");
-      return;
-    }
-
-    for (int i = 1; i <= N; i++) {
-      if (!visited[i]) {
-        visited[i] = true;
-        arr[depth] = i;
-        DFS(depth + 1);
-        visited[i] = false;
-      }
-    }
-  }
-}
+        for (int i = 1; i <= N; i++) {
+            if (!visited[i]) { //방문하지 않았다면
+                visited[i] = true; //방문 처리
+                result[depth] = i; //결과 저장
+                backtracking(depth + 1); //다음 depth 진행
+                visited[i] = false; //방문 false
+            }
+        }
+    }//backtracking
+}//class
