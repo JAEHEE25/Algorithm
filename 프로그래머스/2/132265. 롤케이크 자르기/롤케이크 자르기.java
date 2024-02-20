@@ -1,23 +1,16 @@
-import java.util.*;
 class Solution {
     public int solution(int[] topping) {
         int answer = 0;
-        Set<Integer> set = new HashSet<>();
-        int[] cheolsu = new int[topping.length];
-        int[] brother = new int[topping.length];
-        
-        for (int i = 0; i < topping.length; i++) {
-            set.add(topping[i]);
-            cheolsu[i] = set.size();
-        }
-        set.clear();
-        for (int i = topping.length - 1; i >= 0; i--) {
-            set.add(topping[i]);
-            brother[i] = set.size();
-        }
-        
-        for (int i = 0; i < topping.length-1; i++) {
-            if(cheolsu[i] == brother[i+1]) answer++;
+        int[] left = new int[10001], right = new int[10001];
+        int ls = 0, rs = 0;
+        for(var i : topping) right[i]++;
+        for(var i : right) rs += i > 0 ? 1 : 0;
+        for(var i : topping) {
+            right[i]--;
+            if (right[i] == 0) rs--;
+            if (left[i] == 0) ls++;
+            left[i]++;
+            if (rs == ls) answer++;
         }
         return answer;
     }
