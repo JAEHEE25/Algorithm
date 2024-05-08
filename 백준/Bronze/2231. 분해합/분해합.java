@@ -7,17 +7,18 @@ public class Main {
 		int N = sc.nextInt();
         int answer = 0;
 
-        for (int i = 1; i < N; i++) {
-            int sum = i;
-            String str = String.valueOf(i);
-            for (int j = 0; j < str.length(); j++) {
-                sum += Integer.parseInt(String.valueOf(str.charAt(j)));
-            }
-            if (sum == N) {
-                answer = i;
-                break;
-            }
-        }
+        for (int i = 0; i < N; i++) {
+			int sum = i;
+			String str = String.valueOf(i);
+			for (int j = 0; j < str.length(); j++) {
+				sum += str.charAt(j) - 48;
+			}
+
+			if (sum == N) {
+				answer = i;
+				break;
+			}
+		}
         System.out.println(answer);
 	}//main
 }//class
