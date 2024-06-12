@@ -1,29 +1,36 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
+import java.util.*;
 
 public class Main {
-  public static void main(String[] args) throws IOException {
-    BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-    int n = Integer.parseInt(br.readLine());
+    static int[] stairs;
+    static int[] point;
 
-    int[] stairs = new int[n + 1];
-    int[] dp = new int[n + 1];
-    //dp[계단 번호] = 최대 점수
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
-    for (int i = 1; i <= n; i++) {
-      stairs[i] = Integer.parseInt(br.readLine());
+        int N = Integer.parseInt(br.readLine());
+        stairs = new int[N + 1];
+        point = new int[N + 1]; //point[계단] = 계단까지의 최대 점수
+        Arrays.fill(point, -1);
+
+        for (int i = 1; i <= N; i++) {
+            stairs[i] = Integer.parseInt(br.readLine());
+        }
+
+        point[0] = 0;
+        point[1] = stairs[1];
+        
+        if (N >= 2) {
+            point[2] = stairs[1] + stairs[2];
+        }
+        
+        System.out.println(recur(N));
+    }//main
+
+    public static int recur(int N) {
+        if (point[N] == -1) {
+            point[N] = Math.max(recur(N - 3) + stairs[N - 1], recur(N - 2)) + stairs[N];
+        }
+        return point[N];
     }
-
-    for (int i = 1; i <= n; i++) {
-      if (i == 1) dp[1] = stairs[1];
-      else if (i == 2) dp[2] = stairs[1] + stairs[2];
-      else if (i == 3) dp[3] = Math.max(stairs[1], stairs[2]) + stairs[3];
-      else {
-        dp[i] = Math.max(dp[i - 3] + stairs[i - 1], dp[i - 2]) + stairs[i];
-      }
-    }
-    System.out.println(dp[n]);
-
-  }//main
 }//class
