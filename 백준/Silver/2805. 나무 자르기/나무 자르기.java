@@ -1,50 +1,41 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.StringTokenizer;
+import java.io.*;
+import java.util.*;
 
 public class Main {
-  public static void main(String[] args) throws IOException {
+	public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
-    BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-    StringTokenizer st = new StringTokenizer(br.readLine());
+		StringTokenizer st = new StringTokenizer(br.readLine());
+		int N = Integer.parseInt(st.nextToken());
+		int M = Integer.parseInt(st.nextToken());
 
-    int n = Integer.parseInt(st.nextToken());
-    int m = Integer.parseInt(st.nextToken());
+        int[] trees = new int[N];
+		int high = 0; //최댓값
+        st = new StringTokenizer(br.readLine());
+		for (int i = 0; i < N; i++) {
+            trees[i] = Integer.parseInt(st.nextToken());
+			high = Math.max(high, trees[i]);
+		}
 
-    int[] tree = new int[n];
+        int low = 0;
+        int H;
 
-    long max = 0;
+        while (low + 1 < high) { //찾는 구간이 1일때까지
+            H = (low + high) / 2;
+            long sum = 0;
 
-    st = new StringTokenizer(br.readLine());
-    for (int i = 0; i < n; i++) {
-      tree[i] = Integer.parseInt(st.nextToken());
-      if (tree[i] > max) {
-        max = tree[i];
-      }
-    }
+            //sum 구하기
+            for (int i = 0; i < N; i++) {
+                if (trees[i] > H)
+                    sum += (trees[i] - H);
+            }
 
-    long min = 0;
-
-    while (min <= max) {
-      long height = (min + max) / 2;
-      long sum = 0;
-
-      for (int t : tree) {
-        if (t <= height) {
-          continue;
+            if (sum >= M) { //sum이 M 이상일 경우(조건을 만족할 경우) -> 포함해서 돌린다.
+                low = H;
+            } else { //sum이 M보다 작을 경우 -> 포함하지 않는다.
+                high = H;
+            }
         }
-        sum += (t - height);
-      }
-
-      if (sum < m) {
-        max = height - 1;
-      } else {
-        min = height + 1;
-      }
-    }
-
-    System.out.println(max);
-
-  }//main
+        System.out.println(low);
+	}//main
 }//class
