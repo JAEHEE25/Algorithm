@@ -1,76 +1,65 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.StringTokenizer;
+import java.io.*;
+import java.util.*;
 
 public class Main {
+    static int M;
+    static int N;
+    static int[][] cabbages;
+    static boolean[][] visit;
+    static int[] dx = {0, 0, -1, 1};
+    static int[] dy = {1, -1, 0, 0};
 
-  static int m;
-  static int n;
-  static int[][] ground;
-  static boolean[][] visited;
-  static int[] dx = {1, 0 ,0, -1};  //하, 우, 좌, 상
-  static int[] dy = {0, 1, -1, 0};
+	public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
-  public static void main(String[] args) throws IOException {
-    BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-    StringBuilder sb = new StringBuilder();
-    StringTokenizer st = new StringTokenizer(br.readLine());
-    int T = Integer.parseInt(st.nextToken());
+		int T = Integer.parseInt(br.readLine());
+		StringBuilder answer = new StringBuilder();
+		for (int t = 0; t < T; t++) {
+			StringTokenizer st = new StringTokenizer(br.readLine());
+			M = Integer.parseInt(st.nextToken());
+			N = Integer.parseInt(st.nextToken());
+			int K = Integer.parseInt(st.nextToken());
 
-    for (int test = 0; test < T; test++) { //테스트 케이스
-      st = new StringTokenizer(br.readLine());
-      m = Integer.parseInt(st.nextToken());
-      n = Integer.parseInt(st.nextToken());
-      int k = Integer.parseInt(st.nextToken());
+            cabbages= new int[M][N];
+            visit = new boolean[M][N];
+            for (int i = 0; i < M; i++) {
+                Arrays.fill(cabbages[i], 0);
+            }
 
-      ground = new int[m][n];
-      visited = new boolean[m][n];
-      int cnt = 0;
+			for (int k = 0; k < K; k++) {
+                st = new StringTokenizer(br.readLine());
+                int x = Integer.parseInt(st.nextToken());
+                int y = Integer.parseInt(st.nextToken());
+                cabbages[x][y] = 1;
+            }
 
-      for (int i = 0; i < k; i++) {  //배추 심기
-        st = new StringTokenizer(br.readLine());
-        int x = Integer.parseInt(st.nextToken());
-        int y = Integer.parseInt(st.nextToken());
+            int cnt = 0;
+            for (int i = 0; i < M; i++) {
+                for (int j = 0; j < N; j++) {
+                    if (!visit[i][j] && cabbages[i][j] == 1) {
+                        dfs(i, j);
+                        cnt++;
+                    }
+                }
+            }
 
-        ground[x][y] = 1;
-      }
+            answer.append(cnt).append("\n");
+		}
 
-      for (int i = 0; i < m; i++) {
-        for (int j = 0; j < n; j++) {
-          if (visited[i][j] || ground[i][j] == 0) {  //이미 방문했거나 값이 0이면 continue
-            continue;
-          }
-          DFS(i, j);
-          cnt++;  //탐색이 끝날 때마다 개수 추가
+        System.out.println(answer);
+	}//main
+
+    public static void dfs(int x, int y) {
+        visit[x][y] = true;
+
+        for (int i = 0; i < 4; i++) {
+            int nx = x + dx[i];
+            int ny = y + dy[i];
+
+            if (nx >= 0 && nx < M && ny >= 0 && ny < N && !visit[nx][ny] && cabbages[nx][ny] == 1) {
+                dfs(nx, ny);
+            }
         }
-      }
-
-      sb.append(cnt + "\n");
     }
-    System.out.print(sb);
-  } //main
 
-  static void DFS(int row, int col) {
-//    System.out.println("row: " + row + " col: " + col);
-    visited[row][col] = true;  //방문 처리
-
-    for (int i = 0; i < 4; i++) {  //상하좌우에 1이 있으면 그 노드에서 DFS
-      int next_row = row + dx[i];
-      int next_col = col + dy[i];
-
-//      System.out.println("next row: " + next_row + " next col: " + next_col);
-
-      if (next_row < 0 || next_col < 0 || next_row >= m || next_col >= n) {  //범위 벗어나면 continue
-        continue;
-      }
-      if (visited[next_row][next_col]) {  //이미 방문했으면 continue
-        continue;
-      }
-      if (ground[next_row][next_col] == 1) {  //방문하지 않았고 1이면 DFS
-        DFS(next_row, next_col);
-      }
-    }
-  } //DFS
-
-} //class
+}//class
