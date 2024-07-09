@@ -1,77 +1,77 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.Queue;
-import java.util.StringTokenizer;
+import java.io.*;
+import java.util.*;;
 
 public class Main {
+	static int N;
+	static Queue<Chess> queue;
+	static int[][] board;
+	static boolean[][] visited;
+	static int[] dx = {-2, -2, 2, 2, -1, 1, -1, 1};
+	static int[] dy = {-1, 1, -1, 1, -2, -2, 2, 2};
+	static StringBuilder answer;
 
-  static int[][] board;
-  static boolean[][] visited;
+	public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
-  public static void main(String[] args) throws IOException {
-    BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-    int T = Integer.parseInt(br.readLine());
+		int T = Integer.parseInt(br.readLine());
+		answer = new StringBuilder();
 
-    for (int testcase = 0; testcase < T; testcase++) {
-      int I = Integer.parseInt(br.readLine());
-      board = new int[I][I];
-      visited = new boolean[I][I];
+		for (int t = 0; t < T; t++) {
+			N = Integer.parseInt(br.readLine());
+			board = new int[N][N];
+			visited = new boolean[N][N];
 
-      StringTokenizer st = new StringTokenizer(br.readLine());
-      int sx = Integer.parseInt(st.nextToken());
-      int sy = Integer.parseInt(st.nextToken());
-      st = new StringTokenizer(br.readLine());
-      int tx = Integer.parseInt(st.nextToken());
-      int ty = Integer.parseInt(st.nextToken());
+			StringTokenizer st = new StringTokenizer(br.readLine());
+			int nx = Integer.parseInt(st.nextToken());
+			int ny = Integer.parseInt(st.nextToken());
 
-      BFS(sx, sy, I, tx, ty);
+			st = new StringTokenizer(br.readLine());
+			int tx = Integer.parseInt(st.nextToken());
+			int ty = Integer.parseInt(st.nextToken());
 
-      System.out.println(board[tx][ty]);
-    }//test
+			queue = new LinkedList<>();
+			BFS(nx, ny, tx, ty);
 
-  }//main
+		}
 
-  static void BFS(int sx, int sy, int I, int tx, int ty) {
-    int[] dx = {-2, -2, 2, 2, -1, 1, -1, 1};
-    int[] dy = {-1, 1, -1, 1, -2, -2, 2, 2};
-    Queue<Chess> queue = new LinkedList<>();
-    queue.add(new Chess(sx, sy));
-    visited[sx][sy] = true;
+		System.out.println(answer);
+	}//main
 
-    while (!queue.isEmpty()) {
-      Chess poll = queue.poll();
+	static void BFS(int nx, int ny, int tx, int ty) {
+		queue.add(new Chess(nx, ny, 0));
+		visited[nx][ny] = true;
 
-      for (int i = 0; i < 8; i++) {
-        int nx = poll.x + dx[i];
-        int ny = poll.y + dy[i];
+		while (!queue.isEmpty()) {
+			Chess poll = queue.poll();
+            
+			if (poll.x == tx && poll.y == ty) { //정답
+				answer.append(poll.count).append("\n");
+				return;
+			}
 
-        if (nx < 0 || nx >= I || ny < 0 || ny >= I || visited[nx][ny]) {
-          continue;
-        }
+			for (int i = 0; i < 8; i++) {
+				int nextX = poll.x + dx[i];
+				int nextY = poll.y + dy[i];
 
-        board[nx][ny] = board[poll.x][poll.y] + 1;
+				if (nextX < 0 || nextX >= N || nextY < 0 || nextY >= N || visited[nextX][nextY]) {
+					continue;
+				}
 
-        if (nx == tx && ny == ty) {
-          return;
-        }
-
-        queue.add(new Chess(nx, ny));
-        visited[nx][ny] = true;
-      }
-    }
-  }//BFS
-
-}//class
+				queue.add(new Chess(nextX, nextY, poll.count + 1));
+				visited[nextX][nextY] = true;
+			}
+		}
+	}
+}
 
 class Chess {
-  public int x;
-  public int y;
+	int x;
+	int y;
+	int count;
 
-  public Chess(int x, int y) {
-    this.x = x;
-    this.y = y;
-  }
+	Chess(int x, int y, int count) {
+		this.x = x;
+		this.y = y;
+		this.count = count;
+	}
 }
