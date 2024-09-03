@@ -3,6 +3,8 @@ import java.util.*;
 class Solution {
     static ArrayList<Integer>[] close;
     static boolean[] visit;
+    static int count;
+    
     public int solution(int n, int[][] wires) {
         int answer = Integer.MAX_VALUE;
         
@@ -26,7 +28,8 @@ class Solution {
             close[v2].remove(Integer.valueOf(v1));
             
             visit = new boolean[n + 1];
-            int count = DFS(1);
+            count = 0;
+            DFS(1);
             int diff = Math.abs(count - (n - count));
             answer = Math.min(answer, diff);
             
@@ -36,14 +39,12 @@ class Solution {
         return answer;
     }
     
-    public int DFS(int num) {
+    public void DFS(int num) {
         visit[num] = true;
-        int count = 1;
+        count++;
         
         for (int next : close[num]) {
-            if (!visit[next]) count += DFS(next);
+            if (!visit[next]) DFS(next);
         }
-        
-        return count;
     }
 }
