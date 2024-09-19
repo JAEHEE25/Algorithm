@@ -33,7 +33,6 @@ class Solution {
         
         while (!queue.isEmpty()) {
             Robot poll = queue.poll();
-            System.out.println(poll.x + " " + poll.y + " " + poll.count);
             
             if (boardArr[poll.x][poll.y] == 'G') {
                 answer = poll.count;
@@ -46,7 +45,6 @@ class Solution {
                 getMove(poll.x, poll.y, i, boardArr); //nx, ny 업데이트
                 
                 if (!visit[nx][ny]) {
-                    System.out.println("nx = " + nx + " ny = " + ny);
                     queue.add(new Robot(nx, ny, poll.count + 1));
                     visit[nx][ny] = true;
                 }
