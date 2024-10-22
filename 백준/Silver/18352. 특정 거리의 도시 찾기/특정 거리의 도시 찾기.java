@@ -1,74 +1,61 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.Queue;
-import java.util.StringTokenizer;
+import java.io.*;
+import java.util.*;
 
 public class Main {
+	static ArrayList<Integer>[] close;
+	static int[] dist;
+	static boolean[] visit;
 
-  static boolean[] visited;
-  static ArrayList<Integer>[] close;
-  static int[] distance;
+	public static void main(String[] args) throws IOException {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
-  public static void main(String[] args) throws IOException {
-    BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-    StringTokenizer st = new StringTokenizer(br.readLine());
-    StringBuilder sb = new StringBuilder();
+		StringTokenizer st = new StringTokenizer(br.readLine());
+		int N = Integer.parseInt(st.nextToken()); //노드 개수
+		int M = Integer.parseInt(st.nextToken()); //에지 개수
+		int K = Integer.parseInt(st.nextToken()); //정답 거리
+		int X = Integer.parseInt(st.nextToken()); //출발
 
-    int n = Integer.parseInt(st.nextToken());
-    int m = Integer.parseInt(st.nextToken());
-    int k = Integer.parseInt(st.nextToken());
-    int x = Integer.parseInt(st.nextToken());
+		//초기화
+		dist = new int[N + 1];
+		visit = new boolean[N + 1];
+		close = new ArrayList[N + 1];
+		for (int i = 1; i <= N; i++) {
+			close[i] = new ArrayList<>();
+		}
 
-    close = new ArrayList[n + 1];
-    visited = new boolean[n + 1];
+		//인접 리스트 입력
+		for (int i = 0; i < M; i++) {
+			st = new StringTokenizer(br.readLine());
+			close[Integer.parseInt(st.nextToken())].add(Integer.parseInt(st.nextToken()));
+		}
 
-    for (int i = 0; i <= n; i++) {  //초기화
-      ArrayList<Integer> list = new ArrayList<>();
-      close[i] = list;
-    }
+		BFS(X);
 
-    for (int i = 0; i < m; i++) {
-      st = new StringTokenizer(br.readLine());
-      close[Integer.parseInt(st.nextToken())].add(Integer.parseInt(st.nextToken()));
-    }
+		StringBuilder answer = new StringBuilder();
+		for (int i = 0; i < dist.length; i++) {
+			if (dist[i] == K)
+				answer.append(i).append("\n");
+		}
+		if (String.valueOf(answer).equals(""))
+			System.out.println("-1");
+		else
+			System.out.println(answer);
+	}//main
 
-    distance = new int[n+1];
-    BFS(x);
+	static void BFS(int X) {
+		Queue<Integer> queue = new LinkedList<>();
+		queue.add(X);
+		visit[X] = true;
 
-    for (int i = 1; i <= n; i++) {
-      if (distance[i] == k) {
-        sb.append(i + "\n");
-      }
-    }
-    if (sb.length() == 0) {
-      sb.append("-1");
-    }
-    System.out.print(sb);
-  }//main
-
-  static void BFS(int start) {
-    Queue<Integer> queue = new LinkedList<>();
-    queue.add(start);
-    visited[start] = true;
-    distance[start] = 0;
-
-    while (!queue.isEmpty()) {
-      int poll = queue.poll();
-
-      for (int i : close[poll]) {
-        if (!visited[i]) {
-          queue.add(i);
-          visited[i] = true;
-          distance[i] = distance[poll] + 1;
-        }
-      }
-    }
-
-  }//BFS
-
+		while (!queue.isEmpty()) {
+			Integer now = queue.poll();
+			for (Integer next : close[now]) {
+				if (!visit[next]) {
+					visit[next] = true;
+					dist[next] = dist[now] + 1;
+					queue.add(next);
+				}
+			}
+		}
+	}
 }//class
