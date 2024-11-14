@@ -1,17 +1,11 @@
 class Solution {
     public int[] solution(int[] sequence, int k) {
+        if (sequence[0] == k) return new int[]{0,0};
+        
         int[] answer = new int[2];
         answer[0] = 0;
         answer[1] = Integer.MAX_VALUE;
-        
-        for (int i = 0; i < sequence.length; i++) {
-            if (sequence[i] == k) {
-                answer[0] = i;
-                answer[1] = i;
-                return answer;
-            }
-        }
-        
+       
         int left = 0;
         int right = 1;
         long sum = sequence[left] + sequence[right];
