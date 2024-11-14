@@ -33,8 +33,6 @@ class Solution {
                         answer[1] = right;
                     }
                 }
-                right++;
-                sum += right < sequence.length ? sequence[right] : 0;
                 sum -= sequence[left];
                 left++;
             }
