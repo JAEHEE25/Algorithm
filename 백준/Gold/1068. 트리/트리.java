@@ -1,53 +1,67 @@
+import java.io.*;
 import java.util.*;
- 
+
 public class Main {
- 
-    static int n, delete;
-    static int[] parent;
-    static int count;
-    static boolean[] visited;
-    
-    public static void main(String[] args) {
-        Scanner scan = new Scanner(System.in);
-        
-        n = scan.nextInt();
-        parent = new int[n];
+    static int N;
+    static ArrayList<Integer>[] close;
+    static boolean[] visit;
+    static int X;
+    static int answer;
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+
+        N = Integer.parseInt(br.readLine());
+        close = new ArrayList[N];
+        visit = new boolean[N];
+        for (int i = 0; i < N; i++) {
+            close[i] = new ArrayList<>();
+        }
+
         int root = 0;
-        for(int i = 0; i < n; i++) {
-            parent[i] = scan.nextInt();        
-            if(parent[i] == -1) root = i;
+        StringTokenizer st = new StringTokenizer(br.readLine());
+        for (int i = 0; i < N; i++) {
+            int p = Integer.parseInt(st.nextToken());
+            close[i].add(p);
+            if (p != -1) {
+                close[p].add(i);
+            } else {
+                root = i;
+            }
         }
-        delete = scan.nextInt();
+
+        X = Integer.parseInt(br.readLine());
         
-        deleteNode(delete);
-            
-        count = 0;
-        visited = new boolean[n];
-        countLeaf(root);
-            
-        System.out.println(count);
-    }
-    
-    public static void deleteNode(int d) {
-        parent[d] = -2;
-        for(int i = 0; i < n; i++) {
-            if(parent[i] == d) {
-                deleteNode(i);
-            }
+        for (int i = 0; i < N; i++) {
+            Collections.sort(close[i], Collections.reverseOrder());
         }
-    }
-    
-    public static void countLeaf(int s) {
-        boolean isLeaf = true;
-        visited[s] = true;
-        if(parent[s] != -2) {
-            for(int i = 0; i < n; i++) {
-                if(parent[i] == s && visited[i] == false) {
-                    countLeaf(i);
-                    isLeaf = false;
+        if (root == X) {
+            answer = 0;
+        } else {
+            DFS(root);
+        }
+        System.out.println(answer);
+    }//main
+
+    static void DFS(int num) {
+        visit[num] = true;
+        int size = close[num].size();
+
+        for (int next : close[num]) {
+            if (next == -1) {
+                if (size == 1) answer++;
+                continue;
+            }
+            if (next == X) {
+                size--;
+                continue;
+            }
+            if (visit[next]) {
+                if (size == 1) {
+                    answer++;
                 }
+                continue;
             }
-            if(isLeaf) count++;
+            DFS(next);
         }
     }
-}
+}//class
