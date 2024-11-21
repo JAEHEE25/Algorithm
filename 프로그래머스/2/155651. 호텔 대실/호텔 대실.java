@@ -46,7 +46,6 @@ class Book implements Comparable<Book> {
     
     @Override
     public int compareTo(Book book) {
-        if (this.endTime > book.endTime) return 1;
-        return -1;
+        return this.endTime - book.endTime;
     }
 }
