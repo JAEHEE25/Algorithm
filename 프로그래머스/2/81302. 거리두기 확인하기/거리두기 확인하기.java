@@ -1,97 +1,48 @@
 class Solution {
-    public int[] solution(String[][] places) {
-        int[] answer = new int[5];
-        
-        for (int p = 0; p < 5; p++) {
-            char[][] seats = new char[5][5];
-            for (int i = 0; i < 5; i++) {
-                seats[i] = places[p][i].toCharArray();
+    static int[] dx = {-1, 0, 1, 0};
+    static int[] dy = {0, 1, 0, -1};
+    static boolean[][] visit;
+
+    static int[] answer;
+
+    public void dfs(int num, int x, int y, int count, String[] places){
+        if (count > 2) return;
+        if (count > 0 && count <= 2 && places[x].charAt(y) == 'P'){
+            //2칸 범위내에 다른 응시자가 있을 경우 거리두기 미준수로 0처리
+            answer[num] = 0;
+            return;
+        }
+        for (int i = 0; i < 4; i++) {
+            int nx = x + dx[i];
+            int ny = y + dy[i];
+            //배열 범위 밖으로 초과하는지 여부 검사, 파티션으로 분리되어 있는 경우 상관 없음.
+            if (nx >= 0 && nx < 5 && ny >= 0 && ny < 5 && places[nx].charAt(ny) != 'X') {
+                if (visit[nx][ny]) continue; //이미 방문한 곳일 경우 생략
+                visit[nx][ny] = true;
+                dfs(num, nx, ny, count + 1, places);
+                visit[nx][ny] = false;
             }
-            if (solution(seats)) answer[p] = 1;
+        }
+    }
+
+    public int[] solution(String[][] places) {
+        answer = new int[places.length];
+        for (int i = 0; i < places.length; i++) {
+            answer[i] = 1;
+        }
+
+        for (int i = 0; i < places.length; i++) {
+            visit = new boolean[5][5];
+            for (int j = 0; j < 5; j++) {
+                for (int k = 0; k < 5; k++) {
+                    if (places[i][j].charAt(k) == 'P'){
+                        visit[j][k] = true;
+                        dfs(i, j, k, 0, places[i]);
+                        visit[j][k] = false;
+                    }
+                }
+            }
         }
         return answer;
     }
-    
-    boolean solution(char[][] seats) {
-        for (int i = 0; i < 5; i++) {
-            for (int j = 0; j < 5; j++) {
-                if (seats[i][j] == 'P') {
-                    if (!checkDist(seats, i, j)) {
-                        return false;
-                    }
-                }
-            }
-        }
-        return true;
-    }
-    
-    boolean checkDist(char[][] seats, int x, int y) {
-        //상하좌우 1칸, 상하좌우 2칸, 대각선
-        int[] dx = {0, 0, 1, -1, -2, 2, 0, 0, -1, -1, 1, 1};
-        int[] dy = {1, -1, 0, 0, 0, 0, -2, 2, -1, 1, -1, 1};
-        
-        for (int i = 0; i < 12; i++) {
-            int nx = x + dx[i];
-            int ny = y + dy[i];
-            
-            if (nx < 0 || nx >= 5 || ny < 0 || ny >= 5) continue;
-            
-            if (seats[nx][ny] == 'P') { //응시자
-                if (i < 4) { //상하좌우 1칸
-                    return false;
-                } else if (i < 8) { //상하좌우 2칸
-                    if (!checkPartitionBy2(seats, dx[i], dy[i], x, y)) { //파티션 위치 체크
-                        return false;
-                    }
-                } else { //대각선
-                    if (!checkPartitionByDiag(seats, dx[i], dy[i], x, y)) { //파티션 위치 체크
-                        return false;
-                    }
-                }
-            }
-        }
-        return true;
-    }
-    
-    boolean checkPartitionBy2(char[][] seats, int dx, int dy, int nx, int ny) {
-        if (dx == -2 && dy == 0) { //위2
-            if (seats[nx - 1][ny] == 'X') {
-                return true;
-            }
-        } else if (dx == 2 && dy == 0) { //아래2
-            if (seats[nx + 1][ny] == 'X') {
-                return true;
-            }   
-        } else if (dx == 0 && dy == -2) { //왼2
-            if (seats[nx][ny - 1] == 'X') {
-                return true;
-            }    
-        } else { //오2
-            if (seats[nx][ny + 1] == 'X') {
-                return true;
-            }    
-        }
-        return false;
-    }
-    
-    boolean checkPartitionByDiag(char[][] seats, int dx, int dy, int nx, int ny) {
-        if (dx == -1 && dy == -1) { //왼쪽 위
-            if (seats[nx - 1][ny] == 'X' && seats[nx][ny - 1] == 'X') {
-                return true;
-            }
-        } else if (dx == -1 && dy == 1) { //오른쪽 위
-            if (seats[nx - 1][ny] == 'X' && seats[nx][ny + 1] == 'X') {
-                return true;
-            }   
-        } else if (dx == 1 && dy == -1) { //왼쪽 아래
-            if (seats[nx + 1][ny] == 'X' && seats[nx][ny - 1] == 'X') {
-                return true;
-            }    
-        } else { //오른쪽 아래
-            if (seats[nx + 1][ny] == 'X' && seats[nx][ny + 1] == 'X') {
-                return true;
-            }    
-        }
-        return false;
-    }    
 }
