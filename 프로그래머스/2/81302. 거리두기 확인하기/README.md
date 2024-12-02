@@ -1,6 +1,6 @@
 # [level 2] 거리두기 확인하기 - 81302 
 
-[문제 링크](https://school.programmers.co.kr/learn/courses/30/lessons/81302#fn1) 
+[문제 링크](https://school.programmers.co.kr/learn/courses/30/lessons/81302) 
 
 ### 성능 요약
 
@@ -16,7 +16,7 @@
 
 ### 제출 일자
 
-2024년 12월 03일 00:06:38
+2024년 12월 03일 00:07:31
 
 ### 문제 설명
 

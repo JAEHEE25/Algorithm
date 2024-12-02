@@ -1,54 +1,48 @@
-import java.util.*;
-
 class Solution {
-    static int[] dx = {0, 0, 1, -1};
-    static int[] dy = {1, -1, 0, 0};
+    static int[] dx = {-1, 0, 1, 0};
+    static int[] dy = {0, 1, 0, -1};
     static boolean[][] visit;
-    static char[][] seat;
+
     static int[] answer;
-    public int[] solution(String[][] places) {
-        visit = new boolean[5][5];
-        seat = new char[5][5];
-        answer = new int[5];
-        Arrays.fill(answer, 1);
-        
-        for (int i = 0; i < places.length; i++) {
-            for (int j = 0; j < 5; j++) {
-                seat[j] = places[i][j].toCharArray();
+
+    public void dfs(int num, int x, int y, int count, String[] places){
+        if (count > 2) return;
+        if (count > 0 && count <= 2 && places[x].charAt(y) == 'P'){
+            //2칸 범위내에 다른 응시자가 있을 경우 거리두기 미준수로 0처리
+            answer[num] = 0;
+            return;
+        }
+        for (int i = 0; i < 4; i++) {
+            int nx = x + dx[i];
+            int ny = y + dy[i];
+            //배열 범위 밖으로 초과하는지 여부 검사, 파티션으로 분리되어 있는 경우 상관 없음.
+            if (nx >= 0 && nx < 5 && ny >= 0 && ny < 5 && places[nx].charAt(ny) != 'X') {
+                if (visit[nx][ny]) continue; //이미 방문한 곳일 경우 생략
+                visit[nx][ny] = true;
+                dfs(num, nx, ny, count + 1, places);
+                visit[nx][ny] = false;
             }
-            
+        }
+    }
+
+    public int[] solution(String[][] places) {
+        answer = new int[places.length];
+        for (int i = 0; i < places.length; i++) {
+            answer[i] = 1;
+        }
+
+        for (int i = 0; i < places.length; i++) {
+            visit = new boolean[5][5];
             for (int j = 0; j < 5; j++) {
                 for (int k = 0; k < 5; k++) {
-                    if (seat[j][k] == 'P') {
+                    if (places[i][j].charAt(k) == 'P'){
                         visit[j][k] = true;
-                        backtracking(j, k, 0, i);
+                        dfs(i, j, k, 0, places[i]);
                         visit[j][k] = false;
                     }
                 }
             }
         }
         return answer;
-    }
-    
-    static void backtracking(int x, int y, int count, int i) {
-        if (count > 2) {
-            return;
-        } else {
-            if (count != 0 && seat[x][y] == 'P') { //거리 2 이하 & 응시자
-                answer[i] = 0;
-                return;
-            }
-        }
-        
-        for (int d = 0; d < 4; d++) {
-            int nx = x + dx[d];
-            int ny = y + dy[d];
-            
-            if (nx < 0 || nx >= 5 || ny < 0 || ny >= 5 || visit[nx][ny] || seat[nx][ny] == 'X') continue;
-            
-            visit[nx][ny] = true;
-            backtracking(nx, ny, count + 1, i);
-            visit[nx][ny] = false;
-        }
     }
 }
